@@ -1,6 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const marcasController = require("../controllers/marcasController");
+const apiKeyMiddleware = require('../config/apiKey.js')
+  
+  
+ router.use(apiKeyMiddleware);
 
 router.get("/", marcasController.getAllMarcas);
 router.get("/:id", marcasController.getMarcas);

@@ -1,8 +1,14 @@
 const pool = require("../config/database.js");
 
-const getCosmeticos = async () => {
-    const result = await pool.query("SELECT * FROM cosmeticos");
-    return result.rows;
+const getCosmeticos = async (name) => {
+    if(!name){
+        const result = await pool.query("SELECT * FROM cosmeticos");
+        return result.rows;
+    }
+    else{
+        const result = await pool.query("SELECT * FROM cosmeticos WHERE name ILIKE $1", [`%${name}%`]);
+        return result.rows;
+    }
 };
 
 const getCosmeticoById = async (id) => {
@@ -10,10 +16,10 @@ const getCosmeticoById = async (id) => {
     return result.rows[0];
 };
 
-const createCosmetico = async (name, categoria) => {
+const createCosmetico = async (name, categoria, photo) => {
     const result = await pool.query(
-        "INSERT INTO cosmeticos (name, categoria) VALUES ($1, $2) RETURNING *",
-        [name, categoria]
+        "INSERT INTO cosmeticos (name, categoria, photo) VALUES ($1, $2) RETURNING *",
+        [name, categoria, photo]
     );
     return result.rows[0];
 };

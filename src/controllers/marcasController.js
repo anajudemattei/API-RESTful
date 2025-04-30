@@ -2,7 +2,8 @@ const marcasModel = require("../models/marcasModel");
 
 const getAllMarcas = async (req, res) => {
     try {
-        const users = await marcasModel.getMarcas();
+        const { name } = req.query;
+        const marcas = await marcasModel.getMarcas(name);
         res.json(users);
     } catch (error) {
         res.status(404).json({ message: "Erro ao buscar marcas." });
@@ -24,7 +25,8 @@ const getMarcas = async (req, res) => {
 const createMarca = async (req, res) => {
     try {
         const { name, fundador } = req.body;
-        const newMarca = await marcasModel.createMarca(name, fundador);
+        const photo = req.file ? req.file.path : null;
+        const newMarca = await marcasModel.createMarca(name, fundador, photo);
         res.status(201).json(newMarca);
     } catch (error) {
         console.log(error);
